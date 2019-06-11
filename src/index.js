@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import SeasonDisplay from "./SeasonDisplay";
+import Spinner from "./Spinner";
 
 class App extends React.Component {
   // // special function specific to the javscript language itself, not React
@@ -42,11 +43,9 @@ class App extends React.Component {
     console.log("It re-rendered");
   }
 
-  // special function required by React
-  // You should not put function calls that will take some time, or initialize some work/request in the render() because render() will re-run many times (when the state is changed)
-  render() {
-    // We access the latitude from the state with this.state.lat
+  // A helper function with the necessary conditionals we took out from render(). You should not have conditionals or multiple return statements in render() b/c it will it harder to style each result (especially if you have 100s of conditionals)
 
+  renderContent() {
     if (this.state.errorMessage && !this.state.lat) {
       return <div>Error: {this.state.errorMessage}</div>;
     }
@@ -55,7 +54,16 @@ class App extends React.Component {
       return <SeasonDisplay lat={this.state.lat} />;
     }
 
-    return <div>Loading...</div>;
+    return <Spinner message="Please accept location request" />;
+  }
+
+  // special function required by React
+  // You should not put function calls that will take some time, or initialize some work/request in the render() because render() will re-run many times (when the state is changed)
+  render() {
+    return (
+      // We access the latitude from the state with this.state.lat
+      <div className="border red">{this.renderContent()}</div>
+    );
   }
 }
 
